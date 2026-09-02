@@ -31,7 +31,7 @@ namespace LibraryManagementSystem.Managements
             _bookRepository.Delete(bookWillDelete);
             await _unitOfWork.SaveChangesAsync();
         }
-        private int GetBookId()
+        private int GetValidId()
         {
             Console.Write("Enter the book Id: ");
             int bookId;
@@ -41,7 +41,7 @@ namespace LibraryManagementSystem.Managements
         }
         private async Task<Book?> GetBookAndCheckIsValidAsync()
         {
-            int bookId = GetBookId();
+            int bookId = GetValidId();
             Book? book = await _bookRepository.GetByIdAsync(bookId);
             if (book is null)
             {
@@ -108,7 +108,7 @@ namespace LibraryManagementSystem.Managements
         }
         public async Task GetBookById()
         {
-            int bookId = GetBookId();
+            int bookId = GetValidId();
             Book? book = await _bookRepository.GetBookWithCategoryByIdAsync(bookId);
             if (book is null)
             {

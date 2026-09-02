@@ -8,17 +8,22 @@
         public static Category Create(List<string> oldCategoriesName)
         {
             Category category = new Category();
+            category.UpdateName(oldCategoriesName);
+            return category;
+        }
+
+
+        public void UpdateName(List<string> oldCategoriesName)
+        {
             Console.Write("Enter category name: ");
-            ValidationResult validationResult = category.SetName(Console.ReadLine()!, oldCategoriesName);
+            ValidationResult validationResult = SetName(Console.ReadLine()!, oldCategoriesName);
             while (!validationResult.IsSuccess)
             {
                 Console.WriteLine(validationResult);
                 Console.Write("Enter another category name: ");
-                validationResult = category.SetName(Console.ReadLine()!, oldCategoriesName);
+                validationResult = SetName(Console.ReadLine()!, oldCategoriesName);
             }
-            return category;
         }
-
         public ValidationResult SetName(string newName , List<string> oldCategoriesName)
         {
             if (string.IsNullOrWhiteSpace(newName))
