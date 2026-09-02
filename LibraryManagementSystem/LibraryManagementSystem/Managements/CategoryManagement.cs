@@ -3,6 +3,7 @@ using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using LibraryManagementSystem.Repositories;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +19,52 @@ namespace LibraryManagementSystem.Managements
         {
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task ShowMenuAsync()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=================================");
+                Console.WriteLine("       Category Management       ");
+                Console.WriteLine("=================================");
+                Console.WriteLine("1. Add Category");
+                Console.WriteLine("2. Update Category");
+                Console.WriteLine("3. Delete Category");
+                Console.WriteLine("4. Get Category By ID (with Books)");
+                Console.WriteLine("5. Get All Categories");
+                Console.WriteLine("6. Return to Main Menu");
+                Console.Write("\nSelect an option: ");
+
+                ConsoleKey choice = Console.ReadKey().Key;
+
+                switch (choice)
+                {
+                    case ConsoleKey.D1:
+                        await AddCategoryAsync();
+                        break;
+                    case ConsoleKey.D2:
+                        await UpdateCategoryAsync();
+                        break;
+                    case ConsoleKey.D3:
+                        await DeleteCategoryAsync();
+                        break;
+                    case ConsoleKey.D4:
+                        await GetCategoryByIdAsync();
+                        break;
+                    case ConsoleKey.D5:
+                        await GetAllCategoriesAsync();
+                        break;
+                    case ConsoleKey.D6:
+                        return;
+                    default:
+                        Console.WriteLine("\nInvalid option you should chose number from 1 to 6");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
         }
         public async Task AddCategoryAsync()
         {
@@ -113,28 +160,27 @@ namespace LibraryManagementSystem.Managements
             Console.ReadKey();
         }
 
-        private async Task GetAllCategoriesAsync()
+        public async Task GetAllCategoriesAsync()
         {
             Console.Clear();
             Console.WriteLine("--- All Categories ---");
 
             var categories = await _categoryRepository.GetAllCategoriesWithBooksAsync();
 
-            if (categories == null || System.Linq.Enumerable.Count(categories) == 0)
-            {
+            if (categories.IsNullOrEmpty())
                 Console.WriteLine("No categories found in the system.");
-            }
             else
             {
                 foreach (var category in categories)
                 {
-                    DisplayCategoryDetails(category);
-                    Console.WriteLine(new string('-', 40));
+                    Console.WriteLine(category);
+                    Console.WriteLine(new string('=', 50));
                 }
             }
 
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
+    
     }
 }
