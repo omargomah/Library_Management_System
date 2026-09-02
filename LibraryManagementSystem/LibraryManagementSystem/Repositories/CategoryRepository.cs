@@ -12,6 +12,8 @@ namespace LibraryManagementSystem.Repositories
     {
         public async Task<List<string>> GetAllCategoriesNameAsync() =>
              await _set.Select(x => x.Name).ToListAsync();
+        public async Task<Category?> GetCategoryByIdWithBooksAsync(int categoryId) =>
+            await _set.Include(x => x.Books).SingleOrDefaultAsync(x => x.Id == categoryId);
         public async Task<List<SelectMenuOfCategoryDto>> GetAllCategoriesAsync() =>
              await _set.Select(x => new SelectMenuOfCategoryDto(x.Id,x.Name)).ToListAsync();
     }

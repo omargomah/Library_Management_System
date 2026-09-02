@@ -10,7 +10,7 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
     {
         Task<List<SelectMenuOfCategoryDto>> GetAllCategoriesAsync();
         Task<List<string>> GetAllCategoriesNameAsync();
-
+        Task<Category?> GetCategoryByIdWithBooksAsync(int categoryId);
 
     }
 }

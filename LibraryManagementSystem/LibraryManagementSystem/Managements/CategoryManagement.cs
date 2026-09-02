@@ -98,5 +98,19 @@ namespace LibraryManagementSystem.Managements
                 Console.ReadKey();
             }
         }
+        private async Task GetCategoryByIdAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("--- Find Category by ID ---");
+
+            var category = await GetEntityByIdAndCheckIsValidOrNot(_categoryRepository.GetCategoryByIdWithBooksAsync);
+
+            if (category is null)
+                return;
+            DisplayCategoryDetails(category);
+
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LibraryManagementSystem.Entities
+﻿using System.Text;
+
+namespace LibraryManagementSystem.Entities
 {
     public class Category: Entity
     {
@@ -37,6 +39,16 @@
 
             Name = newName.Trim();
             return ValidationResult.Success("Set Name Of category Success");
+        }
+
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Category id: {Id} | Category name: {Name}");
+            foreach (var book in Books)
+                stringBuilder.AppendLine($"\t[Book] Title: {book.Title} | Author: {book.Author} | Year: {book.PublishedYear} | Price: {book.Price:C}");
+            return stringBuilder.ToString();
         }
     }
 }
