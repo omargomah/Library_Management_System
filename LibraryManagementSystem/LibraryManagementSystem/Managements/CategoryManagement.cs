@@ -82,7 +82,7 @@ namespace LibraryManagementSystem.Managements
                 Console.Write("Invalid value enter another one: ");
             return id;
         }
-        private async Task<Category?> GetEntityByIdAndCheckIsValidOrNot(Func<int, Task<Category?>> funcToGetCategoryById)
+        private async Task<Category?> GetEntityByIdAndCheckIsValidOrNotAsync(Func<int, Task<Category?>> funcToGetCategoryById)
         {
             Category? category = await funcToGetCategoryById.Invoke(GetValidId());
             if (category is null)
@@ -114,7 +114,7 @@ namespace LibraryManagementSystem.Managements
             Console.Clear();
             Console.WriteLine("--- Update Category ---");
 
-            Category? categoryWillUpdate = await GetEntityByIdAndCheckIsValidOrNot(_categoryRepository.GetByIdAsync);
+            Category? categoryWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetByIdAsync);
             if (categoryWillUpdate is null)
                 return;
             categoryWillUpdate.UpdateName(await _categoryRepository.GetAllCategoriesNameAsync());
@@ -126,7 +126,7 @@ namespace LibraryManagementSystem.Managements
             Console.Clear();
             Console.WriteLine("--- Delete Category ---");
             
-            var category = await GetEntityByIdAndCheckIsValidOrNot(_categoryRepository.GetByIdAsync);
+            var category = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetByIdAsync);
             if (category == null)
                 return;
 
@@ -150,7 +150,7 @@ namespace LibraryManagementSystem.Managements
             Console.Clear();
             Console.WriteLine("--- Find Category by ID ---");
 
-            var category = await GetEntityByIdAndCheckIsValidOrNot(_categoryRepository.GetCategoryByIdWithBooksAsync);
+            var category = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetCategoryByIdWithBooksAsync);
 
             if (category is null)
                 return;
