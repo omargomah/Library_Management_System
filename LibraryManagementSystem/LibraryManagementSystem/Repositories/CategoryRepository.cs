@@ -10,6 +10,8 @@ namespace LibraryManagementSystem.Repositories
 {
     public class CategoryRepository : Repository<Category> ,ICategoryRepository
     {
+        public async Task<List<string>> GetAllCategoriesNameAsync() =>
+             await _set.Select(x => x.Name).ToListAsync();
         public async Task<List<SelectMenuOfCategoryDto>> GetAllCategoriesAsync() =>
              await _set.Select(x => new SelectMenuOfCategoryDto(x.Id,x.Name)).ToListAsync();
     }
