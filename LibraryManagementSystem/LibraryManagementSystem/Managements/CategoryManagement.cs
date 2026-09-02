@@ -98,7 +98,7 @@ namespace LibraryManagementSystem.Managements
                 Console.ReadKey();
             }
         }
-        private async Task GetCategoryByIdAsync()
+        public async Task GetCategoryByIdAsync()
         {
             Console.Clear();
             Console.WriteLine("--- Find Category by ID ---");
@@ -107,7 +107,31 @@ namespace LibraryManagementSystem.Managements
 
             if (category is null)
                 return;
-            DisplayCategoryDetails(category);
+            Console.WriteLine(category);
+
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+        private async Task GetAllCategoriesAsync()
+        {
+            Console.Clear();
+            Console.WriteLine("--- All Categories ---");
+
+            var categories = await _categoryRepository.GetAllCategoriesWithBooksAsync();
+
+            if (categories == null || System.Linq.Enumerable.Count(categories) == 0)
+            {
+                Console.WriteLine("No categories found in the system.");
+            }
+            else
+            {
+                foreach (var category in categories)
+                {
+                    DisplayCategoryDetails(category);
+                    Console.WriteLine(new string('-', 40));
+                }
+            }
 
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();

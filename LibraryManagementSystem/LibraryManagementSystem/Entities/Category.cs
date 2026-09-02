@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LibraryManagementSystem.Entities
 {
@@ -46,8 +47,11 @@ namespace LibraryManagementSystem.Entities
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"Category id: {Id} | Category name: {Name}");
-            foreach (var book in Books)
-                stringBuilder.AppendLine($"\t[Book] Title: {book.Title} | Author: {book.Author} | Year: {book.PublishedYear} | Price: {book.Price:C}");
+            if (Books.IsNullOrEmpty())
+                stringBuilder.AppendLine("\tNo books currently assigned to this category.");
+            else
+                foreach (var book in Books)
+                    stringBuilder.AppendLine($"\t[Book] Title: {book.Title} | Author: {book.Author} | Year: {book.PublishedYear} | Price: {book.Price:C}");
             return stringBuilder.ToString();
         }
     }
