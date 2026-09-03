@@ -1,6 +1,9 @@
-﻿using LibraryManagementSystem.Entities;
+﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+using LibraryManagementSystem.Dtos.MemberDtos;
+using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,7 +46,7 @@ namespace LibraryManagementSystem.Managements
                 Console.Write($"Invalid value. Enter another {idOfWhat} Id: ");
             return memberId;
         }
-        private async void PrintMessageOfNotValidId(string entity)
+        private void PrintMessageOfNotValidId(string entity)
         {            
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"You entered an invalid {entity} Id. Try again.");
@@ -59,7 +62,6 @@ namespace LibraryManagementSystem.Managements
             EndExecute();
         }
 
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -71,9 +73,8 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("1) Borrow Book");
                 Console.WriteLine("2) Return Book");
                 Console.WriteLine("3) Member Borrowing History");
-                Console.WriteLine("4) Get Member By ID");
-                Console.WriteLine("5) Get All Members");
-                Console.WriteLine("6) Return to Main Menu");
+                Console.WriteLine("4) Book Borrowing History");
+                Console.WriteLine("5) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
@@ -93,24 +94,49 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.D4:
-                        await GetMemberByIdAsync();
+                        await GetBookBorrowingHistoryAsync();
                         break;
 
                     case ConsoleKey.D5:
-                        await GetAllMembersAsync();
-                        break;
-
-                    case ConsoleKey.D6:
                         return;
 
                     default:
-                        Console.WriteLine("\nInvalid option! Please enter a number between 1 and 6.");
+                        Console.WriteLine("\nInvalid option! Please enter a number between 1 and 5.");
                         EndExecute();
                         break;
                 }
             }
         }
 
+        private async Task GetBookBorrowingHistoryAsync()
+        {
+            int bookId = GetValidId("book");
+
+            BookWithBorrowingDto? bookWithBorrowingHistory = await _bookRepository.GetBookWithBorrowingByIdAsync(bookId);
+            if (bookWithBorrowingHistory is null)
+            {
+                PrintMessageOfNotValidId("book");
+                return;
+            }
+
+            Console.WriteLine($"\nBook Title: {bookWithBorrowingHistory.BookTitle}");
+            Console.WriteLine(new string('-', 40));
+            Console.WriteLine("Borrowing History:");
+
+            if (bookWithBorrowingHistory.HistoryDtos.IsNullOrEmpty())
+                Console.WriteLine("\tNot borrowed by any member yet.");
+            else
+                foreach (var b in bookWithBorrowingHistory.HistoryDtos)
+                {
+                    Console.WriteLine($"\tMember Name: {b.MemberName}");
+                    Console.WriteLine($"\tBorrow Date: {b.BorrowDate.ToShortDateString()}");
+                    Console.WriteLine($"\tReturn Date: {(b.ReturnDate.HasValue ? b.ReturnDate.Value.ToShortDateString() : "Not return yet")}");
+                    Console.WriteLine(new string('-', 30));
+                }
+
+            EndExecute();
+
+        }
 
         private async Task BorrowBookAsync()
         {
@@ -123,7 +149,7 @@ namespace LibraryManagementSystem.Managements
                 return;
             }
             int bookId = GetValidId("book");
-            bool IsValidBookId = await _memberRepository.CheckIdIsExistAsync(GetValidId("book"));
+            bool IsValidBookId = await _bookRepository.CheckIdIsExistAsync(bookId);
             if (!IsValidBookId)
             {
                 PrintMessageOfNotValidId("book");
@@ -151,7 +177,7 @@ namespace LibraryManagementSystem.Managements
                 return;
             }
 
-            if (!borrowing.ReturnDate.HasValue)
+            if (borrowing.ReturnDate.HasValue)
             { 
                 Console.WriteLine("The book already returned.");
                 EndExecute();
@@ -166,8 +192,31 @@ namespace LibraryManagementSystem.Managements
         private async Task GetMemberBorrowingHistoryAsync()
         {
             int memberId = GetValidId("member");
-        
-        _memberRepository.get
+
+            MemberWithBorrowingHistoryDto? memberWithBorrowingHistory = await _memberRepository.GetMemberWithBorrowingsHistoryByIdAsync(memberId);
+            if (memberWithBorrowingHistory is null)
+            {
+                PrintMessageOfNotValidId("Member");
+                return;
+            }
+
+            Console.WriteLine($"\nMember Name: {memberWithBorrowingHistory.Name}");
+            Console.WriteLine(new string('-', 40));
+            Console.WriteLine("Borrowing History:");
+
+            if (memberWithBorrowingHistory.Borrowings.IsNullOrEmpty())
+                Console.WriteLine("\tNo books borrowed yet.");
+            else
+                foreach (var b in memberWithBorrowingHistory.Borrowings)
+                {
+                    Console.WriteLine($"\tBook Title : {b.BookTitle}");
+                    Console.WriteLine($"\tBorrow Date: {b.BorrowDate.ToShortDateString()}");
+                    Console.WriteLine($"\tReturn Date: {(b.ReturnDate.HasValue? b.ReturnDate.Value.ToShortDateString() : "Not return yet")}");
+                    Console.WriteLine(new string('-', 30));
+                }
+
+            EndExecute();
+
         }
     }
 }

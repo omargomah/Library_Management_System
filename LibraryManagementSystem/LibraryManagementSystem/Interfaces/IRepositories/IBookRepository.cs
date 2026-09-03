@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Entities;
+﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+using LibraryManagementSystem.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
         Task<List<Book>> GetAllBooksWithCategoryAsync();
         Task<Book?> GetBookWithCategoryByIdAsync(int bookId);
         IQueryable<Book> GetAllBooksWithCategory();
+        Task<BookWithBorrowingDto?> GetBookWithBorrowingByIdAsync(int bookId);
 
     }
 }

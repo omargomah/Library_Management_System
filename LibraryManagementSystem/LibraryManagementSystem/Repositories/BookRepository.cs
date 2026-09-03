@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Entities;
+﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 namespace LibraryManagementSystem.Repositories
@@ -11,6 +12,17 @@ namespace LibraryManagementSystem.Repositories
             _set.Include(x => x.Category);
         public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId) =>
             await _set.Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == bookId);
+        public async Task<BookWithBorrowingDto?> GetBookWithBorrowingByIdAsync(int bookId) =>
+            await _set.Where(x => x.Id == bookId).Select(x => new BookWithBorrowingDto()
+            {
+                BookTitle = x.Title,
+                HistoryDtos = x.Borrowings.Select(b => new BookBorrowingHistoryDto()
+                {
+                    BorrowDate = b.BorrowDate,
+                    ReturnDate = b.ReturnDate,
+                    MemberName = b.Member.Name
+                }).ToList()
+            }).FirstOrDefaultAsync();
 
 
     }
