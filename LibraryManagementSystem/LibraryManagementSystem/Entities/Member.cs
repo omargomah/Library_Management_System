@@ -119,7 +119,7 @@ namespace LibraryManagementSystem.Entities
                 builder.AppendLine("\tNo borrowing history found for this member.");
             else
                 foreach (var borrowing in Borrowings)
-                    builder.AppendLine($"\t[Borrowing ID: {borrowing.Id}] Book ID: {borrowing.BookId} | Title: {borrowing.Book.Title} | Author: {borrowing.Book.Author} | Year: {borrowing.Book.PublishedYear} | Price: {borrowing.Book.Price} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {borrowing.ReturnDate.ToShortDateString()}");
+                    builder.AppendLine($"\t[Borrowing ID: {borrowing.Id}] Book ID: {borrowing.BookId} | Title: {borrowing.Book.Title} | Author: {borrowing.Book.Author} | Year: {borrowing.Book.PublishedYear} | Price: {borrowing.Book.Price} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {(borrowing.ReturnDate.HasValue? borrowing.ReturnDate.Value.ToShortDateString():"Not return yet")}");
             return builder.ToString();
         }
     }

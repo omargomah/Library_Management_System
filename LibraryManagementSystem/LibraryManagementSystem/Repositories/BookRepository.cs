@@ -11,7 +11,7 @@ namespace LibraryManagementSystem.Repositories
             _set.Include(x => x.Category);
         public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId) =>
             await _set.Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == bookId);
-    
-    
+
+
     }
 }

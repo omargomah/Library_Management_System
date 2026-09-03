@@ -30,6 +30,9 @@ namespace LibraryManagementSystem.Repositories
         public async Task<T?> GetByIdAsync(int id) =>
             await _set.SingleOrDefaultAsync(x => x.Id == id);
 
+        public async Task<bool> CheckIdIsExistAsync(int id) =>
+            await _set.AnyAsync(x => x.Id == id);
+
         public void Dispose()
         {
             _dbContext.Dispose();

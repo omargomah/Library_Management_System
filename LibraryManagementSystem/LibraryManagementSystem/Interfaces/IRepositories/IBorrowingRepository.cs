@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using LibraryManagementSystem.Entities;
 namespace LibraryManagementSystem.Interfaces.IRepositories
 {
-    internal interface IBorrowingRepository
+    public interface IBorrowingRepository:IRepository<Borrowing>
     {
+        public async Task<bool> CheckThatBookIsAvailableToBorrowAsync(int bookId)
+
     }
 }
