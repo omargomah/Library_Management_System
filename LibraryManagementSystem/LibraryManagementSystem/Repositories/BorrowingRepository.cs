@@ -22,7 +22,7 @@ namespace LibraryManagementSystem.Repositories
         }
         public async Task<bool> CheckThatBookIsAvailableToBorrowAsync(int bookId)
         {
-            Borrowing? borrowing = await _set.LastOrDefaultAsync(x => x.BookId == bookId);
+            Borrowing? borrowing = await _set.OrderBy(x => x.BookId).LastOrDefaultAsync(x => x.BookId == bookId);
                return borrowing is null ? true : borrowing.ReturnDate.HasValue; 
         }
     }

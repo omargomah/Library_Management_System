@@ -35,7 +35,7 @@ namespace LibraryManagementSystem.Managements
         }
         private void EndExecute()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
         private int GetValidId(string idOfWhat)
@@ -108,6 +108,7 @@ namespace LibraryManagementSystem.Managements
         }
         private async Task GetBookBorrowingHistoryAsync()
         {
+            StartExecute("Get Book Borrowing History");
             int bookId = GetValidId("book");
 
             BookWithBorrowingDto? bookWithBorrowingHistory = await _bookRepository.GetBookWithBorrowingByIdAsync(bookId);
@@ -188,6 +189,7 @@ namespace LibraryManagementSystem.Managements
         }
         private async Task GetMemberBorrowingHistoryAsync()
         {
+            StartExecute("Get Member Borrowing History");
             int memberId = GetValidId("member");
 
             MemberWithBorrowingHistoryDto? memberWithBorrowingHistory = await _memberRepository.GetMemberWithBorrowingsHistoryByIdAsync(memberId);

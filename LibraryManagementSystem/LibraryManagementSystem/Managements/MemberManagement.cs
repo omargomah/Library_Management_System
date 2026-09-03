@@ -27,7 +27,7 @@ namespace LibraryManagementSystem.Managements
 
         private void EndExecute()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
 
