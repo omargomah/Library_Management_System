@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Interfaces;
+﻿using LibraryManagementSystem.Entities;
+using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -86,5 +87,14 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
+        public async Task AddMemberAsync()
+        {
+            StartExecute("Add New Member");
+            Member newMember = Member.Create();
+            await _memberRepository.AddAsync(newMember);
+            EndMessageOfAddAndUpdateAndDelete("add", await _unitOfWork.SaveChangesAsync() > 0);
+        }
+
     }
 }
