@@ -9,7 +9,6 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
     public interface ICategoryRepository:IRepository<Category>
     {
         Task<List<CategoryNameAndCountOfBooksInItDto>> GetCategoryByIdWithBooksCountAsync();
-
         Task < List<SelectMenuOfCategoryDto>> GetAllCategoriesAsync();
         Task<List<string>> GetAllCategoriesNameAsync();
         Task<Category?> GetCategoryByIdWithBooksAsync(int categoryId);
