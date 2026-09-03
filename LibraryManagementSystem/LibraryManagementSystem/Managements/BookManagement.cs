@@ -37,7 +37,6 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine($"\nBook {action} fail");
             EndExecute();
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -53,7 +52,7 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("5. Get All Books");
                 Console.WriteLine("6. Search and Filter Books");
                 Console.WriteLine("7. Return to Main Menu");
-                Console.Write("\nSelect an option (1-7): ");
+                Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
 
@@ -93,7 +92,6 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-
         public async Task AddBookAsync()
         {
             StartExecute("Add New Book");
@@ -143,7 +141,6 @@ namespace LibraryManagementSystem.Managements
             }
             return book;
         }
-
         public async Task UpdateBookAsync()
         {
             StartExecute("--- Update Book ---");
