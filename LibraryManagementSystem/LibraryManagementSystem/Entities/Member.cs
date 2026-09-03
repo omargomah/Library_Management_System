@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 
@@ -107,5 +109,18 @@ namespace LibraryManagementSystem.Entities
             }
         }
 
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine($"[ID: {Id}] Name: {Name} | Email: {Email} | Phone: {Phone}");
+            Console.WriteLine("Borrowing History:");
+
+            if (Borrowings.IsNullOrEmpty())
+                builder.AppendLine("\tNo borrowing history found for this member.");
+            else
+                foreach (var borrowing in Borrowings)
+                    builder.AppendLine($"\t[Borrowing ID: {borrowing.Id}] Book ID: {borrowing.BookId} | Title: {borrowing.Book.Title} | Author: {borrowing.Book.Author} | Year: {borrowing.Book.PublishedYear} | Price: {borrowing.Book.Price} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {borrowing.ReturnDate.ToShortDateString()}");
+            return builder.ToString();
+        }
     }
 }

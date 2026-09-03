@@ -1,6 +1,7 @@
 ﻿using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -193,6 +194,37 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("\nOperation cancelled");
                 EndExecute();
             }
+        }
+
+        public async Task GetMemberByIdAsync()
+        {
+            StartExecute("Find Member by ID");
+            Member? member = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetMemberWithBorrowingsByIdAsync);
+            if (member is null)
+                return;
+            Console.WriteLine(member);
+            EndExecute();
+        }
+
+        public async Task GetAllMembersAsync()
+        {
+            StartExecute("All Members");
+            // Ensure repository method fetches members with borrowings list
+            List<Member> members = await _memberRepository.GetAllMembersWithBorrowingsAsync();
+
+            if (members.IsNullOrEmpty())
+            {
+                Console.WriteLine("There are no members yet.");
+            }
+            else
+            {
+                foreach (var member in members)
+                {
+                    DisplayMemberDetails(member);
+                    Console.WriteLine(new string('-', 35));
+                }
+            }
+            EndExecute();
         }
     }
 }

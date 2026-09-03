@@ -7,5 +7,7 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
 {
     public interface IMemberRepository:IRepository<Member>
     {
+        Task<Member?> GetMemberWithBorrowingsByIdAsync(int memberId);
+
     }
 }
