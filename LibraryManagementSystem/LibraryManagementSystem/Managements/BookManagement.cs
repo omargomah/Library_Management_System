@@ -92,14 +92,14 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-        public async Task AddBookAsync()
+        private async Task AddBookAsync()
         {
             StartExecute("Add New Book");
             Book newBook = Book.Create(await _categoryRepository.GetAllCategoriesAsync());
             await _bookRepository.AddAsync(newBook);
             EndMessageOfAddAndUpdateAndDelete("add",await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task DeleteBookAsync()
+        private async Task DeleteBookAsync()
         {
             StartExecute("--- Delete Book ---");
             Book? bookWillDelete = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetByIdAsync);
@@ -141,7 +141,7 @@ namespace LibraryManagementSystem.Managements
             }
             return book;
         }
-        public async Task UpdateBookAsync()
+        private async Task UpdateBookAsync()
         {
             StartExecute("--- Update Book ---");
             Book? bookWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetByIdAsync);
@@ -196,7 +196,7 @@ namespace LibraryManagementSystem.Managements
             _bookRepository.Update(bookWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update",await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task GetBookById()
+        private async Task GetBookById()
         {
             StartExecute("--- Find Book by ID ---");
             Book? book = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetBookWithCategoryByIdAsync);
@@ -205,7 +205,7 @@ namespace LibraryManagementSystem.Managements
             Console.WriteLine(book);
             EndExecute();
         }
-        public async Task GetAllBooks()
+        private async Task GetAllBooks()
         {
             StartExecute("--- All Books ---");
             List<Book> books = await _bookRepository.GetAllBooksWithCategoryAsync();
@@ -216,7 +216,7 @@ namespace LibraryManagementSystem.Managements
                     Console.WriteLine(book);
             EndExecute();
         }
-        public async Task SearchAndFilterOnBooks()
+        private async Task SearchAndFilterOnBooks()
         {
             ConsoleKey finishFilter = ConsoleKey.Enter;
 

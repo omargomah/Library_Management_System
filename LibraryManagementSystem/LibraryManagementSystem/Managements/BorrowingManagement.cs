@@ -61,7 +61,6 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine($"\n{entityName} {action} fail");
             EndExecute();
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -107,7 +106,6 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-
         private async Task GetBookBorrowingHistoryAsync()
         {
             int bookId = GetValidId("book");
@@ -137,7 +135,6 @@ namespace LibraryManagementSystem.Managements
             EndExecute();
 
         }
-
         private async Task BorrowBookAsync()
         {
             StartExecute("Borrow Book");

@@ -20,7 +20,6 @@ namespace LibraryManagementSystem.Managements
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -66,7 +65,7 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-        public async Task AddCategoryAsync()
+        private async Task AddCategoryAsync()
         {
             Console.Clear();
             Console.WriteLine("--- Add New Category ---");
@@ -108,8 +107,7 @@ namespace LibraryManagementSystem.Managements
             Console.ReadKey();
 
         }
-
-        public async Task UpdateCategoryAsync()
+        private async Task UpdateCategoryAsync()
         {
             Console.Clear();
             Console.WriteLine("--- Update Category ---");
@@ -121,7 +119,7 @@ namespace LibraryManagementSystem.Managements
             _categoryRepository.Update(categoryWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update", await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task DeleteCategoryAsync()
+        private async Task DeleteCategoryAsync()
         {
             Console.Clear();
             Console.WriteLine("--- Delete Category ---");
@@ -145,7 +143,7 @@ namespace LibraryManagementSystem.Managements
                 Console.ReadKey();
             }
         }
-        public async Task GetCategoryByIdAsync()
+        private async Task GetCategoryByIdAsync()
         {
             Console.Clear();
             Console.WriteLine("--- Find Category by ID ---");
@@ -159,8 +157,7 @@ namespace LibraryManagementSystem.Managements
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
-
-        public async Task GetAllCategoriesAsync()
+        private async Task GetAllCategoriesAsync()
         {
             Console.Clear();
             Console.WriteLine("--- All Categories ---");
