@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Entities;
+﻿using LibraryManagementSystem.Dtos.MemberDtos;
+using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.IdentityModel.Tokens;
@@ -209,22 +210,38 @@ namespace LibraryManagementSystem.Managements
         public async Task GetAllMembersAsync()
         {
             StartExecute("All Members");
-            // Ensure repository method fetches members with borrowings list
-            List<Member> members = await _memberRepository.GetAllMembersWithBorrowingsAsync();
+            List<MemberWithBorrowingsDto> members = await _memberRepository.GetAllMembersWithBorrowingsAsync();
 
             if (members.IsNullOrEmpty())
-            {
                 Console.WriteLine("There are no members yet.");
-            }
             else
             {
                 foreach (var member in members)
                 {
-                    DisplayMemberDetails(member);
-                    Console.WriteLine(new string('-', 35));
+                    DisplayMemberWithBorrowings(member);
+                    Console.WriteLine(new string('-', 50));
                 }
             }
             EndExecute();
         }
+        private void DisplayMemberWithBorrowings(MemberWithBorrowingsDto member)
+        {
+            Console.WriteLine($"\n[Member ID: {member.Id}] Name: {member.Name}");
+            Console.WriteLine("Borrowing History:");
+
+            if (member.Borrowings == null || !member.Borrowings.Any())
+            {
+                Console.WriteLine("  -> No borrowing history found.");
+            }
+            else
+            {
+                foreach (var borrowing in member.Borrowings)
+                {
+                    Console.WriteLine($"  * Book ID: {borrowing.BookId} | Title: {borrowing.BookTitle} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {borrowing.ReturnDate.ToShortDateString()}");
+                }
+            }
+        }
+
+
     }
 }
