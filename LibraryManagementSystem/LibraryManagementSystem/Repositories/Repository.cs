@@ -8,7 +8,7 @@ namespace LibraryManagementSystem.Repositories
         where T: Entity
     {
         protected readonly DbSet<T> _set;
-        private readonly ApplicationDbContext _dbContext;
+        protected readonly ApplicationDbContext _dbContext;
 
         public Repository()
         {
