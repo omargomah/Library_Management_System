@@ -80,23 +80,23 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await BorrowBookAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await ReturnBookAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await GetMemberBorrowingHistoryAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetBookBorrowingHistoryAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         return;
 
                     default:

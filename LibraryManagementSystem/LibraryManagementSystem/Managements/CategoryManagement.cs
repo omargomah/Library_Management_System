@@ -40,22 +40,22 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddCategoryAsync();
                         break;
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateCategoryAsync();
                         break;
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteCategoryAsync();
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetCategoryByIdAsync();
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllCategoriesAsync();
                         break;
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         return;
                     default:
                         Console.WriteLine("\nInvalid option you should chose number from 1 to 6");

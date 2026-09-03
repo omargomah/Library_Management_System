@@ -58,31 +58,31 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddBookAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateBookAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteBookAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetBookById();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllBooks();
                         break;
 
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         await SearchAndFilterOnBooks();
                         break;
 
-                    case ConsoleKey.D7:
+                    case ConsoleKey.NumPad7:
                         return;
 
                     default:

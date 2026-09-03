@@ -45,27 +45,27 @@ namespace LibraryManagementSystem
 
                 switch (choice.Key)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await bookManagement.ShowMenuAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await categoryManagement.ShowMenuAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await memberManagement.ShowMenuAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await borrowingManagement.ShowMenuAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await ReportManagement.ShowMenuAsync();
                         break;
 
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         exit = true;
                         Console.WriteLine("\nExiting application.");
                         break;

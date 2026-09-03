@@ -83,27 +83,27 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddMemberAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateMemberAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteMemberAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetMemberByIdAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllMembersAsync();
                         break;
 
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         return;
 
                     default:

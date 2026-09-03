@@ -56,23 +56,23 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await GetMostBorrowedBooks();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await GetNumberofBooksPerCategoryAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await GetAverageBookPriceAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetMostActiveMembersAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         return;
 
                     default:
