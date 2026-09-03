@@ -71,13 +71,13 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("=================================");
                 Console.WriteLine("        Member Management        ");
                 Console.WriteLine("=================================");
-                Console.WriteLine("1. Add Member");
-                Console.WriteLine("2. Update Member");
-                Console.WriteLine("3. Delete Member");
-                Console.WriteLine("4. Get Member By ID");
-                Console.WriteLine("5. Get All Members");
-                Console.WriteLine("6. Return to Main Menu");
-                Console.Write("\nSelect an option (1-6): ");
+                Console.WriteLine("1) Add Member");
+                Console.WriteLine("2) Update Member");
+                Console.WriteLine("3) Delete Member");
+                Console.WriteLine("4) Get Member By ID");
+                Console.WriteLine("5) Get All Members");
+                Console.WriteLine("6) Return to Main Menu");
+                Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
 
@@ -230,16 +230,10 @@ namespace LibraryManagementSystem.Managements
             Console.WriteLine("Borrowing History:");
 
             if (member.Borrowings == null || !member.Borrowings.Any())
-            {
                 Console.WriteLine("  -> No borrowing history found.");
-            }
             else
-            {
                 foreach (var borrowing in member.Borrowings)
-                {
-                    Console.WriteLine($"  * Book ID: {borrowing.BookId} | Title: {borrowing.BookTitle} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {borrowing.ReturnDate.ToShortDateString()}");
-                }
-            }
+                    Console.WriteLine($"\tBook ID: {borrowing.BookId} | Title: {borrowing.BookTitle} | Borrowed: {borrowing.BorrowDate.ToShortDateString()} | Return Date: {(borrowing.ReturnDate.HasValue? borrowing.ReturnDate.Value.ToShortDateString() : "Not return yet" )}");
         }
 
 

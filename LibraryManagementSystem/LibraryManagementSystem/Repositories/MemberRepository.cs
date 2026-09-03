@@ -23,6 +23,20 @@ namespace LibraryManagementSystem.Repositories
             }).ToListAsync();
         public async Task<Member?> GetMemberWithBorrowingsByIdAsync(int memberId) =>
             await _set.Include(x => x.Borrowings).ThenInclude(x => x.Book).SingleOrDefaultAsync(x => x.Id == memberId);
-    
+
+        public async Task<MemberWithBorrowingHistoryDto?> GetMemberWithBorrowingsHistoryByIdAsync(int memberId) =>
+
+            await _set.Where(x => x.Id == memberId).Select(x => new MemberWithBorrowingHistoryDto()
+            {
+                Name = x.Name,
+                Borrowings = x.Borrowings.Select(b => new BorrowingHistoryDto()
+                {
+                    BookTitle = b.Book.Title,
+                    BorrowDate = b.BorrowDate,
+                    ReturnDate = b.ReturnDate,
+                })
+            }).FirstOrDefaultAsync();
+
+
     }
 }

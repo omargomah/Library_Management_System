@@ -1,11 +1,9 @@
 ﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
 namespace LibraryManagementSystem.Dtos.MemberDtos
 {
-    public class MemberWithBorrowingsDto
+    public class MemberWithBorrowingHistoryDto
     {
-
-        public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<BorrowingShortDetailsDto> Borrowings { get; set; }
+        public IEnumerable<BorrowingHistoryDto> Borrowings { get; set; }
     }
 }
