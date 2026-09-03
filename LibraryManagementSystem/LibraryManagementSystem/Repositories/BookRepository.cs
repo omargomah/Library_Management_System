@@ -6,6 +6,13 @@ namespace LibraryManagementSystem.Repositories
 {
     public class BookRepository:Repository<Book> ,IBookRepository
     {
+        public async Task<double> GetAveragePriceOfBooks()
+        {
+            if (!await _set.AnyAsync())
+                return 0;
+
+            return await _set.AverageAsync(x => x.Price);
+        }
         public async Task<List<Book>> GetAllBooksWithCategoryAsync() =>
             await GetAllBooksWithCategory().ToListAsync();
         public IQueryable<Book> GetAllBooksWithCategory() =>

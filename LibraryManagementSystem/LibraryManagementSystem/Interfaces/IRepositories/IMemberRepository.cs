@@ -8,6 +8,8 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
 {
     public interface IMemberRepository:IRepository<Member>
     {
+        Task<List<MembersNameAndCountOfBorrowingDto>> GetAllMembersWithBorrowingsCountAsync();
+
         Task<Member?> GetMemberWithBorrowingsByIdAsync(int memberId);
 
         Task<List<MemberWithBorrowingsDto>> GetAllMembersWithBorrowingsAsync();

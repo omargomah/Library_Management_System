@@ -8,6 +8,12 @@ namespace LibraryManagementSystem.Repositories
 {
     public class MemberRepository:Repository<Member>,IMemberRepository
     {
+        public async Task<List<MembersNameAndCountOfBorrowingDto>> GetAllMembersWithBorrowingsCountAsync() =>
+            await _set.Select( x => new MembersNameAndCountOfBorrowingDto() 
+            {
+                MemberName = x.Name,
+                BorrowingCount = x.Borrowings.Count
+            }).OrderByDescending(x => x.BorrowingCount).ToListAsync();
         public async Task<List<MemberWithBorrowingsDto>> GetAllMembersWithBorrowingsAsync() =>
             await _set.Select(x => new MemberWithBorrowingsDto() 
             {
