@@ -70,7 +70,7 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("=================================");
                 Console.WriteLine("1) Borrow Book");
                 Console.WriteLine("2) Return Book");
-                Console.WriteLine("3) Delete Member");
+                Console.WriteLine("3) Member Borrowing History");
                 Console.WriteLine("4) Get Member By ID");
                 Console.WriteLine("5) Get All Members");
                 Console.WriteLine("6) Return to Main Menu");
@@ -89,7 +89,7 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.D3:
-                        await DeleteMemberAsync();
+                        await GetMemberBorrowingHistoryAsync();
                         break;
 
                     case ConsoleKey.D4:
@@ -142,6 +142,7 @@ namespace LibraryManagementSystem.Managements
         }
         private async Task ReturnBookAsync()
         {
+            StartExecute("Return Book");
             int borrowingId = GetValidId("Borrowing");
             Borrowing? borrowing = await _borrowingRepository.GetByIdAsync(borrowingId);
             if (borrowing is null)
@@ -161,6 +162,12 @@ namespace LibraryManagementSystem.Managements
                 _borrowingRepository.Update(borrowing);
                 EndMessageOfAddAndUpdateAndDelete("return" ,await _unitOfWork.SaveChangesAsync() > 0 ,"book");
             }
+        }
+        private async Task GetMemberBorrowingHistoryAsync()
+        {
+            int memberId = GetValidId("member");
+        
+        _memberRepository.get
         }
     }
 }

@@ -12,6 +12,8 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
 
         Task<List<MemberWithBorrowingsDto>> GetAllMembersWithBorrowingsAsync();
 
+        Task<MemberWithBorrowingHistoryDto?> GetMemberWithBorrowingsHistoryByIdAsync(int memberId);
+
 
     }
 }
