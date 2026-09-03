@@ -18,9 +18,5 @@ namespace LibraryManagementSystem.Repositories
         {
             return await _dbContext.SaveChangesAsync();
         }
-        public void Dispose()
-        {
-             _dbContext.Dispose();
-        }
     }
 }

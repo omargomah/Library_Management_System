@@ -1,10 +1,11 @@
-﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.BorrowingDtos;
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 namespace LibraryManagementSystem.Repositories
 {
-    public class BookRepository:Repository<Book> ,IBookRepository
+    public class BookRepository(ApplicationDbContext dbContext) : Repository<Book>(dbContext) ,IBookRepository
     {
         public async Task<double> GetAveragePriceOfBooks()
         {

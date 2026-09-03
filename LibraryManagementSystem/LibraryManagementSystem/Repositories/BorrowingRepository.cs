@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.BorrowingDtos;
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,9 @@ using System.Net;
 
 namespace LibraryManagementSystem.Repositories
 {
-    public class BorrowingRepository:Repository<Borrowing>,IBorrowingRepository
+    public class BorrowingRepository(ApplicationDbContext dbContext) :Repository<Borrowing>(dbContext),IBorrowingRepository
     {
+
         public async Task<List<BooksNameAndBorrowCountDto>> GetBooksAndCountOfBorrowAsync()
         {
             return await _set.GroupBy(x => x.Book.Title).Select(x => 

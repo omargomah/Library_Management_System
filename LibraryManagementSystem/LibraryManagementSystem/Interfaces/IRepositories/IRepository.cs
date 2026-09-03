@@ -3,7 +3,7 @@ using LibraryManagementSystem.Entities;
 using Microsoft.EntityFrameworkCore;
 namespace LibraryManagementSystem.Interfaces.IRepositories
 {
-    public interface IRepository<T> : IDisposable
+    public interface IRepository<T>
         where T: Entity
     {
         Task<bool> CheckIdIsExistAsync(int id);
