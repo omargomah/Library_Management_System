@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LibraryManagementSystem.Interfaces.IRepositories
 {
-    internal interface IMemberRepository
+    public interface IMemberRepository
     {
     }
 }

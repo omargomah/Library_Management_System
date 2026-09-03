@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LibraryManagementSystem.Interfaces.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LibraryManagementSystem.Repositories
 {
-    internal class MemberRepository
+    public class MemberRepository:IMemberRepository
     {
     }
 }
