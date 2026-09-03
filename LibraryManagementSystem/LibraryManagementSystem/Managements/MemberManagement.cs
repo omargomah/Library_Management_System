@@ -27,7 +27,7 @@ namespace LibraryManagementSystem.Managements
 
         private void EndExecute()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
 
@@ -83,27 +83,27 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddMemberAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateMemberAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteMemberAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetMemberByIdAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllMembersAsync();
                         break;
 
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         return;
 
                     default:
@@ -113,16 +113,14 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-
-        public async Task AddMemberAsync()
+        private async Task AddMemberAsync()
         {
             StartExecute("Add New Member");
             Member newMember = Member.Create();
             await _memberRepository.AddAsync(newMember);
             EndMessageOfAddAndUpdateAndDelete("add", await _unitOfWork.SaveChangesAsync() > 0);
         }
-
-        public async Task UpdateMemberAsync()
+        private async Task UpdateMemberAsync()
         {
             StartExecute("Update Member");
             Member? memberWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetByIdAsync);
@@ -173,8 +171,7 @@ namespace LibraryManagementSystem.Managements
             _memberRepository.Update(memberWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update", await _unitOfWork.SaveChangesAsync() > 0);
         }
-
-        public async Task DeleteMemberAsync()
+        private async Task DeleteMemberAsync()
         {
             StartExecute("Delete Member");
             Member? memberWillDelete = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetByIdAsync);
@@ -196,8 +193,7 @@ namespace LibraryManagementSystem.Managements
                 EndExecute();
             }
         }
-
-        public async Task GetMemberByIdAsync()
+        private async Task GetMemberByIdAsync()
         {
             StartExecute("Find Member by ID");
             Member? member = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetMemberWithBorrowingsByIdAsync);
@@ -206,8 +202,7 @@ namespace LibraryManagementSystem.Managements
             Console.WriteLine(member);
             EndExecute();
         }
-
-        public async Task GetAllMembersAsync()
+        private async Task GetAllMembersAsync()
         {
             StartExecute("All Members");
             List<MemberWithBorrowingsDto> members = await _memberRepository.GetAllMembersWithBorrowingsAsync();

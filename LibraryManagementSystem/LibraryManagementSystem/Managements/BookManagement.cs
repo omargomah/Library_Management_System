@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Entities;
+﻿using LibraryManagementSystem.Dtos.CategoryDtos;
+using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace LibraryManagementSystem.Managements
         }
         private void EndExecute()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
         private void EndMessageOfAddAndUpdateAndDelete(string action, bool IsSuccess)
@@ -37,7 +38,6 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine($"\nBook {action} fail");
             EndExecute();
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -53,37 +53,37 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("5. Get All Books");
                 Console.WriteLine("6. Search and Filter Books");
                 Console.WriteLine("7. Return to Main Menu");
-                Console.Write("\nSelect an option (1-7): ");
+                Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddBookAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateBookAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteBookAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetBookById();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllBooks();
                         break;
 
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         await SearchAndFilterOnBooks();
                         break;
 
-                    case ConsoleKey.D7:
+                    case ConsoleKey.NumPad7:
                         return;
 
                     default:
@@ -93,15 +93,25 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-
-        public async Task AddBookAsync()
+        private async Task AddBookAsync()
         {
             StartExecute("Add New Book");
-            Book newBook = Book.Create(await _categoryRepository.GetAllCategoriesAsync());
+            List<SelectMenuOfCategoryDto> selectMenuOfCategoryDtos =   await _categoryRepository.GetAllCategoriesAsync();
+            if (!selectMenuOfCategoryDtos.Any())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You Should add Category first to be able to add book for it");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("You Should go to back to main menu then go to Category managment and add category");
+                Console.ForegroundColor = ConsoleColor.White;
+                EndExecute();
+                return;
+            }
+            Book newBook = Book.Create(selectMenuOfCategoryDtos);
             await _bookRepository.AddAsync(newBook);
             EndMessageOfAddAndUpdateAndDelete("add",await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task DeleteBookAsync()
+        private async Task DeleteBookAsync()
         {
             StartExecute("--- Delete Book ---");
             Book? bookWillDelete = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetByIdAsync);
@@ -126,7 +136,7 @@ namespace LibraryManagementSystem.Managements
         {
             Console.Write("Enter the book Id: ");
             int bookId;
-            while (!int.TryParse(Console.ReadLine(), out bookId) && bookId < 1)
+            while (!int.TryParse(Console.ReadLine(), out bookId) || bookId < 1)
                 Console.Write("Invalid value enter another one: ");
             return bookId;
         }
@@ -143,89 +153,91 @@ namespace LibraryManagementSystem.Managements
             }
             return book;
         }
-
-        public async Task UpdateBookAsync()
+        private async Task UpdateBookAsync()
         {
-            StartExecute("--- Update Book ---");
+            StartExecute("Update Book");
             Book? bookWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetByIdAsync);
             if (bookWillUpdate is null)
                 return;
             bool flag = true;
             while (flag)
             {
-                Console.WriteLine("Choose what you want to update: ");
                 
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
                 Console.WriteLine("1) Update title");
                 Console.WriteLine("2) Update author");
                 Console.WriteLine("3) Update publish year");
                 Console.WriteLine("4) Update price");
                 Console.WriteLine("5) Update category");
                 Console.WriteLine("6) ignore update");
-                Console.WriteLine("7) Exit");
+                Console.WriteLine("7) Save Updates");
+                Console.Write("Choose what you want to update: ");
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                Console.WriteLine();
                 switch (keyInfo.Key)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         bookWillUpdate.UpdateTitle();
                         Console.WriteLine("The title update done");
                         break;
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         bookWillUpdate.UpdateAuthor();
                         Console.WriteLine("The Author update done");
                         break;
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         bookWillUpdate.UpdatePublishedYear();
                         Console.WriteLine("The Published Year update done");
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         bookWillUpdate.UpdatePrice();
                         Console.WriteLine("The Price update done");
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         bookWillUpdate.UpdateCategoryId(await _categoryRepository.GetAllCategoriesAsync());
                         Console.WriteLine("The Category update done");
                         break;
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         Console.WriteLine("The Update book is cancel");
                         EndExecute();
                         return;
-                    case ConsoleKey.D7:
+                    case ConsoleKey.NumPad7:
                         flag = false;
                         break;
                     default:
+                        Console.WriteLine("Invalid Operation Choose Number between 1 to 7");
                         break;
                 }
+                Console.WriteLine(new string('=',50));
             }
             _bookRepository.Update(bookWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update",await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task GetBookById()
+        private async Task GetBookById()
         {
-            StartExecute("--- Find Book by ID ---");
+            StartExecute("Find Book by ID");
             Book? book = await GetEntityByIdAndCheckIsValidOrNotAsync(_bookRepository.GetBookWithCategoryByIdAsync);
             if (book is null)
                 return;
             Console.WriteLine(book);
             EndExecute();
         }
-        public async Task GetAllBooks()
+        private async Task GetAllBooks()
         {
-            StartExecute("--- All Books ---");
+            StartExecute("All Books");
             List<Book> books = await _bookRepository.GetAllBooksWithCategoryAsync();
             if(books.IsNullOrEmpty())
                 Console.WriteLine("There is no books yet");
             else
                 foreach (var book in books)
-                    Console.WriteLine(book);
+                    Console.WriteLine($"{book}\n");
             EndExecute();
         }
-        public async Task SearchAndFilterOnBooks()
+        private async Task SearchAndFilterOnBooks()
         {
             ConsoleKey finishFilter = ConsoleKey.Enter;
 
             while (finishFilter == ConsoleKey.Enter)
             {
-                StartExecute("--- Search and Filter Books ---");
+                StartExecute("Search and Filter Books");
                 IQueryable<Book> query =  _bookRepository.GetAllBooksWithCategory();
 
                 Console.Write("Enter book title search term: ");
@@ -240,13 +252,13 @@ namespace LibraryManagementSystem.Managements
                 Console.Write("Select option: ");
                 ConsoleKey priceChoice = Console.ReadKey().Key;
 
-                if (priceChoice == ConsoleKey.D1 || priceChoice == ConsoleKey.D2)
+                if (priceChoice == ConsoleKey.NumPad1 || priceChoice == ConsoleKey.NumPad2)
                 {
-                    Console.Write("Enter the price amount: ");
+                    Console.Write("\nEnter the price amount: ");
                     double priceValue;
                     while (!double.TryParse(Console.ReadLine(), out priceValue) || priceValue < 0)
                         Console.Write("Invalid value Enter price again: ");
-                    if (priceChoice == ConsoleKey.D1)
+                    if (priceChoice == ConsoleKey.NumPad1)
                         query = query.Where(b => b.Price < priceValue);
                     else
                         query = query.Where(b => b.Price > priceValue);
@@ -267,9 +279,9 @@ namespace LibraryManagementSystem.Managements
 
                 query = sortChoice switch
                 {
-                    ConsoleKey.D1 => query.OrderBy(b => b.Title),
-                    ConsoleKey.D2 => query.OrderBy(b => b.Price),
-                    ConsoleKey.D3 => query.OrderByDescending(b => b.Price),
+                    ConsoleKey.NumPad1 => query.OrderBy(b => b.Title),
+                    ConsoleKey.NumPad2 => query.OrderBy(b => b.Price),
+                    ConsoleKey.NumPad3 => query.OrderByDescending(b => b.Price),
                     _ => query
                 };
 
@@ -286,7 +298,7 @@ namespace LibraryManagementSystem.Managements
                     foreach (var book in result)
                         Console.WriteLine(book);
 
-                Console.WriteLine("\nPress any key to return to the main menu or Enter to make new search");
+                Console.Write("\nPress any key to return to the main menu or Enter to make new search....");
                 finishFilter =  Console.ReadKey().Key;                
             }
         }

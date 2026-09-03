@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.BorrowingDtos;
 using LibraryManagementSystem.Dtos.MemberDtos;
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Repositories
 {
-    public class MemberRepository:Repository<Member>,IMemberRepository
+    public class MemberRepository(ApplicationDbContext dbContext) :Repository<Member>(dbContext),IMemberRepository
     {
         public async Task<List<MembersNameAndCountOfBorrowingDto>> GetAllMembersWithBorrowingsCountAsync() =>
             await _set.Select( x => new MembersNameAndCountOfBorrowingDto() 

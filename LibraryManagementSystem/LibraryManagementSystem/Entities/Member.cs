@@ -83,16 +83,15 @@ namespace LibraryManagementSystem.Entities
         public ValidationResult SetEmail(string newEmail)
         {
             if (string.IsNullOrWhiteSpace(newEmail))
-                return ValidationResult.Fail("The Phone should not be null or whiteSpace only");
+                return ValidationResult.Fail("The Email should not be null or whiteSpace only");
             newEmail = newEmail.Trim();
 
             if (newEmail.Length > Constants.MaxEmailLength)
                 return ValidationResult.Fail($"The Email Length should be less than {Constants.MaxEmailLength}");
-            MailAddress mailAddress = new MailAddress(newEmail);
             if (!IsValidEmail(newEmail))
                 return ValidationResult.Fail($"The Email Format is Invalid it should be like that `example@gmail.com`");
 
-            Phone = newEmail;
+            Email = newEmail;
             return ValidationResult.Success("the Email is valid");
         }
         private bool IsValidEmail(string email)

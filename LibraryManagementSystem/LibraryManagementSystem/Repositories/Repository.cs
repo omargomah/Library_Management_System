@@ -8,11 +8,11 @@ namespace LibraryManagementSystem.Repositories
         where T: Entity
     {
         protected readonly DbSet<T> _set;
-        protected readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public Repository()
+        public Repository(ApplicationDbContext dbContext)
         {
-            _dbContext = new ApplicationDbContext();
+            _dbContext = dbContext;
             _set = _dbContext.Set<T>();
         }
         public async ValueTask<T> AddAsync(T entity)
@@ -32,10 +32,5 @@ namespace LibraryManagementSystem.Repositories
 
         public async Task<bool> CheckIdIsExistAsync(int id) =>
             await _set.AnyAsync(x => x.Id == id);
-
-        public void Dispose()
-        {
-            _dbContext.Dispose();
-        }
     }
 }

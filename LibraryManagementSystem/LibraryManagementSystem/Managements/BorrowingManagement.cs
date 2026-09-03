@@ -35,7 +35,7 @@ namespace LibraryManagementSystem.Managements
         }
         private void EndExecute()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
         private int GetValidId(string idOfWhat)
@@ -61,7 +61,6 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine($"\n{entityName} {action} fail");
             EndExecute();
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -81,23 +80,23 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await BorrowBookAsync();
                         break;
 
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await ReturnBookAsync();
                         break;
 
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await GetMemberBorrowingHistoryAsync();
                         break;
 
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetBookBorrowingHistoryAsync();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         return;
 
                     default:
@@ -107,9 +106,9 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-
         private async Task GetBookBorrowingHistoryAsync()
         {
+            StartExecute("Get Book Borrowing History");
             int bookId = GetValidId("book");
 
             BookWithBorrowingDto? bookWithBorrowingHistory = await _bookRepository.GetBookWithBorrowingByIdAsync(bookId);
@@ -137,7 +136,6 @@ namespace LibraryManagementSystem.Managements
             EndExecute();
 
         }
-
         private async Task BorrowBookAsync()
         {
             StartExecute("Borrow Book");
@@ -191,6 +189,7 @@ namespace LibraryManagementSystem.Managements
         }
         private async Task GetMemberBorrowingHistoryAsync()
         {
+            StartExecute("Get Member Borrowing History");
             int memberId = GetValidId("member");
 
             MemberWithBorrowingHistoryDto? memberWithBorrowingHistory = await _memberRepository.GetMemberWithBorrowingsHistoryByIdAsync(memberId);

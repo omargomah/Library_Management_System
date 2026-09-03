@@ -1,10 +1,11 @@
-﻿using LibraryManagementSystem.Dtos.CategoryDtos;
+﻿using LibraryManagementSystem.Data;
+using LibraryManagementSystem.Dtos.CategoryDtos;
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 namespace LibraryManagementSystem.Repositories
 {
-    public class CategoryRepository : Repository<Category> ,ICategoryRepository
+    public class CategoryRepository(ApplicationDbContext dbContext) : Repository<Category>(dbContext) ,ICategoryRepository
     {
         public async Task<List<CategoryNameAndCountOfBooksInItDto>> GetCategoryByIdWithBooksCountAsync() =>
             await _set.Select(x => new CategoryNameAndCountOfBooksInItDto() 

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace LibraryManagementSystem.Managements
 {
@@ -20,7 +21,6 @@ namespace LibraryManagementSystem.Managements
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
         }
-
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -41,22 +41,22 @@ namespace LibraryManagementSystem.Managements
 
                 switch (choice)
                 {
-                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
                         await AddCategoryAsync();
                         break;
-                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
                         await UpdateCategoryAsync();
                         break;
-                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
                         await DeleteCategoryAsync();
                         break;
-                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
                         await GetCategoryByIdAsync();
                         break;
-                    case ConsoleKey.D5:
+                    case ConsoleKey.NumPad5:
                         await GetAllCategoriesAsync();
                         break;
-                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
                         return;
                     default:
                         Console.WriteLine("\nInvalid option you should chose number from 1 to 6");
@@ -66,10 +66,9 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
-        public async Task AddCategoryAsync()
+        private async Task AddCategoryAsync()
         {
-            Console.Clear();
-            Console.WriteLine("--- Add New Category ---");
+            StartExecute("Add New Category");
             Category newCategory = Category.Create(await _categoryRepository.GetAllCategoriesNameAsync());
             await _categoryRepository.AddAsync(newCategory);
             EndMessageOfAddAndUpdateAndDelete("add", await _unitOfWork.SaveChangesAsync() > 0);
@@ -78,7 +77,7 @@ namespace LibraryManagementSystem.Managements
         {
             Console.Write("Enter the Id: ");
             int id;
-            while (!int.TryParse(Console.ReadLine(), out id) && id < 1)
+            while (!int.TryParse(Console.ReadLine(), out id) || id < 1)
                 Console.Write("Invalid value enter another one: ");
             return id;
         }
@@ -88,10 +87,9 @@ namespace LibraryManagementSystem.Managements
             if (category is null)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("You enter invalid book Id try again");
+                Console.WriteLine("You enter invalid category Id try again");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
+                EndExecute();
                 return null;
             }
             return category;
@@ -104,15 +102,22 @@ namespace LibraryManagementSystem.Managements
             else
                 Console.WriteLine($"\nCategory {action} fail");
 
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
-
+            EndExecute();
         }
-
-        public async Task UpdateCategoryAsync()
+        private void StartExecute(string action)
         {
             Console.Clear();
-            Console.WriteLine("--- Update Category ---");
+            Console.WriteLine($"--- {action} ---");
+        }
+        private void EndExecute()
+        {
+            Console.Write("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+        private async Task UpdateCategoryAsync()
+        {
+            StartExecute("Update Category");
 
             Category? categoryWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetByIdAsync);
             if (categoryWillUpdate is null)
@@ -121,10 +126,9 @@ namespace LibraryManagementSystem.Managements
             _categoryRepository.Update(categoryWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update", await _unitOfWork.SaveChangesAsync() > 0);
         }
-        public async Task DeleteCategoryAsync()
+        private async Task DeleteCategoryAsync()
         {
-            Console.Clear();
-            Console.WriteLine("--- Delete Category ---");
+            StartExecute("Delete Category");
             
             var category = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetByIdAsync);
             if (category == null)
@@ -141,29 +145,23 @@ namespace LibraryManagementSystem.Managements
             else
             {
                 Console.WriteLine("\nOperation cancelled");
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadKey();
+                EndExecute();
             }
         }
-        public async Task GetCategoryByIdAsync()
+        private async Task GetCategoryByIdAsync()
         {
-            Console.Clear();
-            Console.WriteLine("--- Find Category by ID ---");
+            StartExecute("Find Category by ID");
 
             var category = await GetEntityByIdAndCheckIsValidOrNotAsync(_categoryRepository.GetCategoryByIdWithBooksAsync);
 
             if (category is null)
                 return;
             Console.WriteLine(category);
-
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
+            EndExecute();
         }
-
-        public async Task GetAllCategoriesAsync()
+        private async Task GetAllCategoriesAsync()
         {
-            Console.Clear();
-            Console.WriteLine("--- All Categories ---");
+            StartExecute("All Categories");
 
             var categories = await _categoryRepository.GetAllCategoriesWithBooksAsync();
 
@@ -177,9 +175,7 @@ namespace LibraryManagementSystem.Managements
                     Console.WriteLine(new string('=', 50));
                 }
             }
-
-            Console.WriteLine("\nPress any key to continue...");
-            Console.ReadKey();
+            EndExecute();
         }
     
     }

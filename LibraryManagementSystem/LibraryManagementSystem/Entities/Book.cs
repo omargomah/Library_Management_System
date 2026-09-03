@@ -102,9 +102,9 @@ namespace LibraryManagementSystem.Entities
         }
         public void UpdateCategoryId(List<SelectMenuOfCategoryDto> menuOfCategoryDtos)
         {
-            Console.Write("Enter book Category Id: ");
             foreach (var category in menuOfCategoryDtos)
                 Console.WriteLine($"{category.Id}) {category.Name}");
+            Console.Write("Enter book Category Id: ");
             int categoryId;
             while (!int.TryParse(Console.ReadLine(), out categoryId))
                 Console.Write("Invalid number enter it again: ");
@@ -152,7 +152,7 @@ namespace LibraryManagementSystem.Entities
             if (newPublishedYear < 0)
                 return ValidationResult.Fail("Invalid value of Published Year shouldn't be negative");
             if (newPublishedYear > DateTime.Now.Year)
-                return ValidationResult.Fail($"Invalid value of Published Year it should less that {DateTime.Now.Year}");
+                return ValidationResult.Fail($"Invalid value of Published Year it should less thane or equal {DateTime.Now.Year}");
             PublishedYear = newPublishedYear;                            
             return ValidationResult.Success("the Published Year is valid");            
         }
@@ -166,7 +166,7 @@ namespace LibraryManagementSystem.Entities
             return ValidationResult.Success("the Category Id Year is valid");            
         }
         public override string ToString() =>
-            $"[Book] Title: {Title} | Author: {Author} | Year: {PublishedYear} | Price: {Price:C} | Category Id: {Category.Id} | Category Name: {Category.Name}";
+            $"Id: {Id} | Title: {Title} | Author: {Author} | Year: {PublishedYear} | Price: {Price}$ | Category Id: {Category.Id} | Category Name: {Category.Name}";
 
     }
     public class ValidationResult
