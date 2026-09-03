@@ -1,10 +1,17 @@
-﻿using System;
+﻿using LibraryManagementSystem.Dtos.MemberDtos;
+using LibraryManagementSystem.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LibraryManagementSystem.Interfaces.IRepositories
 {
-    internal interface IMemberRepository
+    public interface IMemberRepository:IRepository<Member>
     {
+        Task<Member?> GetMemberWithBorrowingsByIdAsync(int memberId);
+
+        Task<List<MemberWithBorrowingsDto>> GetAllMembersWithBorrowingsAsync();
+
+
     }
 }
