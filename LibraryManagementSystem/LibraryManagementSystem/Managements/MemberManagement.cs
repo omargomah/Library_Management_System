@@ -171,5 +171,28 @@ namespace LibraryManagementSystem.Managements
             _memberRepository.Update(memberWillUpdate);
             EndMessageOfAddAndUpdateAndDelete("update", await _unitOfWork.SaveChangesAsync() > 0);
         }
+
+        public async Task DeleteMemberAsync()
+        {
+            StartExecute("Delete Member");
+            Member? memberWillDelete = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetByIdAsync);
+            if (memberWillDelete is null)
+                return;
+
+            Console.Write($"Are you sure you want to delete member '{memberWillDelete.Name}'? (y/n): ");
+            ConsoleKey confirm = Console.ReadKey().Key;
+            Console.WriteLine();
+
+            if (confirm == ConsoleKey.Y)
+            {
+                _memberRepository.Delete(memberWillDelete);
+                EndMessageOfAddAndUpdateAndDelete("delete", await _unitOfWork.SaveChangesAsync() > 0);
+            }
+            else
+            {
+                Console.WriteLine("\nOperation cancelled");
+                EndExecute();
+            }
+        }
     }
 }
