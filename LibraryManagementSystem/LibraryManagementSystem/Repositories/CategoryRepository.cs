@@ -2,14 +2,16 @@
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace LibraryManagementSystem.Repositories
 {
     public class CategoryRepository : Repository<Category> ,ICategoryRepository
     {
+        public async Task<List<CategoryNameAndCountOfBooksInItDto>> GetCategoryByIdWithBooksCountAsync() =>
+            await _set.Select(x => new CategoryNameAndCountOfBooksInItDto() 
+            {
+                BooksCount = x.Books.Count,
+                CategoryName = x.Name
+            }).ToListAsync();
         public async Task<List<string>> GetAllCategoriesNameAsync() =>
              await _set.Select(x => x.Name).ToListAsync();
         public async Task<List<Category>> GetAllCategoriesWithBooksAsync() =>

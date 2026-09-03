@@ -1,16 +1,23 @@
 ﻿using LibraryManagementSystem.Dtos.BorrowingDtos;
+using LibraryManagementSystem.Dtos.CategoryDtos;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.IdentityModel.Tokens;
+using System.Runtime.ConstrainedExecution;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibraryManagementSystem.Managements
 {
     public class ReportManagement
     {
         private readonly IBorrowingRepository _borrowingRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ReportManagement(IBorrowingRepository borrowingRepository)
+        public ReportManagement(
+            IBorrowingRepository borrowingRepository,
+            ICategoryRepository categoryRepository)
         {
             _borrowingRepository = borrowingRepository;
+            _categoryRepository = categoryRepository;
         }
         public async Task ShowMenuAsync()
         {
@@ -21,7 +28,7 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("        Reports Management        ");
                 Console.WriteLine("=================================");
                 Console.WriteLine("1) Most Borrowed Books");
-                Console.WriteLine("2) Return Book");
+                Console.WriteLine("2) Number of Books Per Category");
                 Console.WriteLine("3) Member Borrowing History");
                 Console.WriteLine("4) Book Borrowing History");
                 Console.WriteLine("5) Return to Main Menu");
@@ -36,7 +43,7 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.D2:
-                        await ReturnBookAsync();
+                        await GetNumberofBooksPerCategoryAsync();
                         break;
 
                     case ConsoleKey.D3:
@@ -57,6 +64,27 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
+        private async Task GetNumberofBooksPerCategoryAsync()
+        {
+            StartExecute("Number of Books Per Category");
+
+            List<CategoryNameAndCountOfBooksInItDto> categoryNameAndCountOfBooksInItDto = _categoryRepository.GetCategoryByIdWithBooksCountAsync();
+
+            if (categoryNameAndCountOfBooksInItDto.IsNullOrEmpty())
+                Console.WriteLine("No category data available.");
+            else
+            {
+                Console.WriteLine($"{"Book",-30} {"Borrow Count",-15}\n");
+                Console.WriteLine(new string('-', 45));
+
+                foreach (var category in categoryNameAndCountOfBooksInItDto)
+                    Console.WriteLine($"{category.CategoryName,-30} {category.BooksCount,-15}");
+            }
+
+            EndExecute();
+        }
+
         private void StartExecute(string action)
         {
             Console.Clear();
