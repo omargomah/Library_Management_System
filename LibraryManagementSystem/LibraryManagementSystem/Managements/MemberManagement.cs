@@ -37,6 +37,30 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine($"\n{entityName} {action} fail");
             EndExecute();
         }
+        private int GetValidId()
+        {
+            Console.Write("Enter the member Id: ");
+            int memberId;
+            while (!int.TryParse(Console.ReadLine(), out memberId) || memberId < 1)
+            {
+                Console.Write("Invalid value. Enter another member Id: ");
+            }
+            return memberId;
+        }
+        private async Task<Member?> GetEntityByIdAndCheckIsValidOrNotAsync(Func<int, Task<Member?>> funcToGetMemberById)
+        {
+            int id = GetValidId();
+            Member? member = await funcToGetMemberById.Invoke(id);
+            if (member is null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You entered an invalid member Id. Try again.");
+                Console.ForegroundColor = ConsoleColor.White;
+                EndExecute();
+                return null;
+            }
+            return member;
+        }
         public async Task ShowMenuAsync()
         {
             while (true)
@@ -96,5 +120,56 @@ namespace LibraryManagementSystem.Managements
             EndMessageOfAddAndUpdateAndDelete("add", await _unitOfWork.SaveChangesAsync() > 0);
         }
 
+        public async Task UpdateMemberAsync()
+        {
+            StartExecute("Update Member");
+            Member? memberWillUpdate = await GetEntityByIdAndCheckIsValidOrNotAsync(_memberRepository.GetByIdAsync);
+            if (memberWillUpdate is null)
+                return;
+
+            bool flag = true;
+            while (flag)
+            {
+                Console.WriteLine($"\nCurrent Member: Name: {memberWillUpdate.Name}, Email: {memberWillUpdate.Email}, Phone: {memberWillUpdate.Phone}");
+                Console.WriteLine("Choose what you want to update: ");
+                Console.WriteLine("1) Update name");
+                Console.WriteLine("2) Update email");
+                Console.WriteLine("3) Update phone");
+                Console.WriteLine("4) Save changes & exit");
+                Console.WriteLine("5) Cancel update");
+
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                Console.WriteLine();
+
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.D1:
+                        memberWillUpdate.UpdateName();
+                        Console.WriteLine("The name update done");
+                        break;
+                    case ConsoleKey.D2:
+                        memberWillUpdate.UpdateEmail();
+                        Console.WriteLine("The email update done");
+                        break;
+                    case ConsoleKey.D3:
+                        memberWillUpdate.UpdatePhone();
+                        Console.WriteLine("The phone update done");
+                        break;
+                    case ConsoleKey.D4:
+                        flag = false;
+                        break;
+                    case ConsoleKey.D5:
+                        Console.WriteLine("The Update member is cancelled");
+                        EndExecute();
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+            }
+
+            _memberRepository.Update(memberWillUpdate);
+            EndMessageOfAddAndUpdateAndDelete("update", await _unitOfWork.SaveChangesAsync() > 0);
+        }
     }
 }
