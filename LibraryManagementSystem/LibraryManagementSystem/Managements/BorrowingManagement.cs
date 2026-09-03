@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("        Borrowing Management        ");
                 Console.WriteLine("=================================");
                 Console.WriteLine("1) Borrow Book");
-                Console.WriteLine("2) Update Member");
+                Console.WriteLine("2) Return Book");
                 Console.WriteLine("3) Delete Member");
                 Console.WriteLine("4) Get Member By ID");
                 Console.WriteLine("5) Get All Members");
@@ -85,7 +85,7 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.D2:
-                        await UpdateMemberAsync();
+                        await ReturnBookAsync();
                         break;
 
                     case ConsoleKey.D3:
@@ -110,6 +110,7 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
 
         private async Task BorrowBookAsync()
         {
@@ -138,6 +139,28 @@ namespace LibraryManagementSystem.Managements
             Borrowing borrowing = Borrowing.Create(memberId, bookId);
             await _borrowingRepository.AddAsync(borrowing);
             EndMessageOfAddAndUpdateAndDelete("borrow", await _unitOfWork.SaveChangesAsync() > 0,"book");
+        }
+        private async Task ReturnBookAsync()
+        {
+            int borrowingId = GetValidId("Borrowing");
+            Borrowing? borrowing = await _borrowingRepository.GetByIdAsync(borrowingId);
+            if (borrowing is null)
+            { 
+                PrintMessageOfNotValidId("borrowing");
+                return;
+            }
+
+            if (!borrowing.ReturnDate.HasValue)
+            { 
+                Console.WriteLine("The book already returned.");
+                EndExecute();
+            }
+            else
+            {
+                borrowing.ReturnBook();
+                _borrowingRepository.Update(borrowing);
+                EndMessageOfAddAndUpdateAndDelete("return" ,await _unitOfWork.SaveChangesAsync() > 0 ,"book");
+            }
         }
     }
 }
