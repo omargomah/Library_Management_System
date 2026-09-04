@@ -128,14 +128,12 @@ namespace LibraryManagementSystem.Managements
                 StartExecute("Search members by name or email");
                 IQueryable<Member> query =  _memberRepository.GetMembersQuery();
 
-                Console.Write("Enter Member Name search term: ");
-                Console.WriteLine("Press Enter to skip Name filtering.");
+                Console.Write("Enter Member Name search term (Press Enter to skip Name filtering) : ");
                 string? nameTerm = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(nameTerm))
                     query = query.Where(m => m.Name.Contains(nameTerm));
 
-                Console.Write("Enter Member Email search term: ");
-                Console.WriteLine("Press Enter to skip email filtering.");
+                Console.Write("Enter Member Email search term (Press Enter to skip email filtering) : ");
                 string? emailTerm = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(emailTerm))
                     query = query.Where(m => m.Email.Contains(emailTerm));
