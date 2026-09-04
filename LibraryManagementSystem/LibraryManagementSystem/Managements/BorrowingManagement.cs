@@ -4,11 +4,6 @@ using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Channels;
-
 namespace LibraryManagementSystem.Managements
 {
     public class BorrowingManagement
@@ -234,7 +229,7 @@ namespace LibraryManagementSystem.Managements
                 return;
             }
 
-            Console.WriteLine($"The Price of book is {_bookRepository.GetBookPriceAsync(bookId)} and you should return it before {DateTime.UtcNow.AddDays(Constants.MaxAllowedDaysToBorrowBook).ToShortDateString()} on each extra day we will take {Constants.FinePerDay}");
+            Console.WriteLine($"The Price of book is {await _bookRepository.GetBookPriceAsync(bookId)}$ and you should return it before {DateTime.UtcNow.AddDays(Constants.MaxAllowedDaysToBorrowBook).ToShortDateString()} on each extra day we will take {Constants.FinePerDay}$");
             Borrowing borrowing = Borrowing.Create(memberId, bookId);
             await _borrowingRepository.AddAsync(borrowing);
             EndMessageOfAddAndUpdateAndDelete("borrow", await _unitOfWork.SaveChangesAsync() > 0,"book");
