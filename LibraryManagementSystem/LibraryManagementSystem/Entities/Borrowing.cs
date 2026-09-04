@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace LibraryManagementSystem.Entities
+﻿namespace LibraryManagementSystem.Entities
 {
     public class Borrowing:Entity
     {
