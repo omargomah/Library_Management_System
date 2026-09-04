@@ -1,9 +1,4 @@
 ﻿using LibraryManagementSystem.Dtos.CategoryDtos;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-
 namespace LibraryManagementSystem.Entities
 {
     public class Book :Entity
