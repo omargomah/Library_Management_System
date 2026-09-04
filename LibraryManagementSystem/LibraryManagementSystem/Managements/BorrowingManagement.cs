@@ -73,7 +73,9 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("2) Return Book");
                 Console.WriteLine("3) Member Borrowing History");
                 Console.WriteLine("4) Book Borrowing History");
-                Console.WriteLine("5) Return to Main Menu");
+                Console.WriteLine("5) Show currently borrowed books");
+                Console.WriteLine("6) Show currently available books");
+                Console.WriteLine("7) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
@@ -97,6 +99,14 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.NumPad5:
+                        await ShowCurrentlyBorrowedBooksAsync();
+                        break;
+
+                    case ConsoleKey.NumPad6:
+                        await ShowCurrentlyAvailableBooksAsync();
+                        break;
+
+                    case ConsoleKey.NumPad7:
                         return;
 
                     default:
@@ -106,6 +116,26 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
+        private async Task ShowCurrentlyAvailableBooksAsync()
+        {
+            StartExecute("Show currently available books");
+            List<string> currentlyBorrowedBooksName = await _bookRepository.CurrentlyAvailableBooksAsync(await _borrowingRepository.CurrentlyBorrowedBooksIdAsync());
+            foreach (var name in currentlyBorrowedBooksName)
+                Console.WriteLine(name);
+            EndExecute();
+        }
+
+        private async Task ShowCurrentlyBorrowedBooksAsync()
+        {
+            StartExecute("Show currently borrowed books");
+            List<string> currentlyBorrowedBooksName = await _borrowingRepository.CurrentlyBorrowedBooksNameAsync();
+            foreach (var name in currentlyBorrowedBooksName)
+                Console.WriteLine(name);
+            EndExecute();
+        
+        }
+
         private async Task GetBookBorrowingHistoryAsync()
         {
             StartExecute("Get Book Borrowing History");

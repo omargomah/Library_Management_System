@@ -6,6 +6,8 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
     {
         Task<bool> CheckThatBookIsAvailableToBorrowAsync(int bookId);
         Task<List<BooksNameAndBorrowCountDto>> GetBooksAndCountOfBorrowAsync();
+        Task<List<string>> CurrentlyBorrowedBooksNameAsync();
+        Task<List<int>> CurrentlyBorrowedBooksIdAsync();
 
     }
 }
