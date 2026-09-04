@@ -59,7 +59,7 @@ The system models relational data using the following entities[cite: 1]:
 ## ⚙️ Getting Started
 
 ### Prerequisites
-*   [.NET 8.0+ SDK](https://dotnet.microsoft.com/download)
+*   [.NET 10.0+ SDK](https://dotnet.microsoft.com/download)
 *   [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (or SQL Server Express)
 *   Visual Studio or VS Code
 
