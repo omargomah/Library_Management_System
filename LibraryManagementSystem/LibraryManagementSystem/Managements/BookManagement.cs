@@ -46,13 +46,13 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("=================================");
                 Console.WriteLine("         Book Management         ");
                 Console.WriteLine("=================================");
-                Console.WriteLine("1. Add Book");
-                Console.WriteLine("2. Update Book");
-                Console.WriteLine("3. Delete Book");
-                Console.WriteLine("4. Get Book By ID");
-                Console.WriteLine("5. Get All Books");
-                Console.WriteLine("6. Search and Filter Books");
-                Console.WriteLine("7. Return to Main Menu");
+                Console.WriteLine("1) Add Book");
+                Console.WriteLine("2) Update Book");
+                Console.WriteLine("3) Delete Book");
+                Console.WriteLine("4) Get Book By ID");
+                Console.WriteLine("5) Get All Books");
+                Console.WriteLine("6) Search and Filter Books");
+                Console.WriteLine("7) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;

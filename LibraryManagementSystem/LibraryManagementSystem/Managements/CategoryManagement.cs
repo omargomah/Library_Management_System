@@ -29,12 +29,13 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("=================================");
                 Console.WriteLine("       Category Management       ");
                 Console.WriteLine("=================================");
-                Console.WriteLine("1. Add Category");
-                Console.WriteLine("2. Update Category");
-                Console.WriteLine("3. Delete Category");
-                Console.WriteLine("4. Get Category By ID (with Books)");
-                Console.WriteLine("5. Get All Categories");
-                Console.WriteLine("6. Return to Main Menu");
+                Console.WriteLine("1) Add Category");
+                Console.WriteLine("2) Update Category");
+                Console.WriteLine("3) Delete Category");
+                Console.WriteLine("4) Get Category By ID (with Books)");
+                Console.WriteLine("5) Get All Categories");
+                Console.WriteLine("6) Find the most popular category");
+                Console.WriteLine("7) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
@@ -56,8 +57,14 @@ namespace LibraryManagementSystem.Managements
                     case ConsoleKey.NumPad5:
                         await GetAllCategoriesAsync();
                         break;
+
                     case ConsoleKey.NumPad6:
+                        await FindTheMostPopularCategoryAsync();
+                        break;
+
+                    case ConsoleKey.NumPad7:
                         return;
+                    
                     default:
                         Console.WriteLine("\nInvalid option you should chose number from 1 to 6");
                         Console.WriteLine("Press any key to continue...");
@@ -66,6 +73,15 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
+        private async Task FindTheMostPopularCategoryAsync()
+        {
+            StartExecute("Find the most popular category");
+            string mostPopularCategoryName = await _categoryRepository.GetMostPopularCategoryAsync();
+            Console.WriteLine(mostPopularCategoryName);
+            EndExecute();
+        }
+
         private async Task AddCategoryAsync()
         {
             StartExecute("Add New Category");

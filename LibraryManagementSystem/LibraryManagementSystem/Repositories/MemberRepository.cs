@@ -9,6 +9,8 @@ namespace LibraryManagementSystem.Repositories
 {
     public class MemberRepository(ApplicationDbContext dbContext) :Repository<Member>(dbContext),IMemberRepository
     {
+        public  IQueryable<Member> GetMembersQuery() =>
+             _set.AsQueryable();
         public async Task<List<MembersNameAndCountOfBorrowingDto>> GetAllMembersWithBorrowingsCountAsync() =>
             await _set.Select( x => new MembersNameAndCountOfBorrowingDto() 
             {

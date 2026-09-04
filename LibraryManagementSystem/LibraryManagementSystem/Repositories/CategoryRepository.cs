@@ -7,6 +7,18 @@ namespace LibraryManagementSystem.Repositories
 {
     public class CategoryRepository(ApplicationDbContext dbContext) : Repository<Category>(dbContext) ,ICategoryRepository
     {
+
+        public async Task<string> GetMostPopularCategoryAsync()
+        {
+            var MostPopularCategory = await _set.Select(x =>
+            new{
+                    CategoryName = x.Name,
+                    BorrowingCount = x.Books.SelectMany(x => x.Borrowings).Count()
+                }).OrderByDescending(x => x.BorrowingCount).FirstOrDefaultAsync();
+            if (MostPopularCategory is null)
+                return "There is No categories in System yet";
+            return MostPopularCategory.CategoryName;
+        }
         public async Task<List<CategoryNameAndCountOfBooksInItDto>> GetCategoryByIdWithBooksCountAsync() =>
             await _set.Select(x => new CategoryNameAndCountOfBooksInItDto() 
             {
