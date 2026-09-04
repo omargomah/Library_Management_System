@@ -4,7 +4,9 @@ namespace LibraryManagementSystem.Interfaces.IRepositories
 {
     public interface IBookRepository: IRepository<Book>
     {
-        Task<List<string>> GetBooksThatHaveNeverBeenBorrowedAsync();
+        Task<double> GetBookPriceAsync(int bookId);
+
+        Task < List<string>> GetBooksThatHaveNeverBeenBorrowedAsync();
 
         Task < List<string>> CurrentlyAvailableBooksAsync(List<int> borrowedBooksId);
         Task<double> GetAveragePriceOfBooks();

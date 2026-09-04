@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Channels;
 
 namespace LibraryManagementSystem.Managements
 {
@@ -206,6 +207,18 @@ namespace LibraryManagementSystem.Managements
                 PrintMessageOfNotValidId("member");
                 return;
             }
+
+            int CountOfActiveBorrowingBookForThisMember = await _borrowingRepository.GetCountOfActiveBorrowingBookForThisMemberAsync(memberId);
+
+            if (CountOfActiveBorrowingBookForThisMember >= Constants.MaXNumberOfActiveBorrowingBookMemberCanHas)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"You Exceeding the limit of borrowing books you should return at least {CountOfActiveBorrowingBookForThisMember - Constants.MaXNumberOfActiveBorrowingBookMemberCanHas + 1 } to be able to borrow book");
+                Console.ForegroundColor = ConsoleColor.White;
+                EndExecute();                
+                return;
+            }
+
             int bookId = GetValidId("book");
             bool IsValidBookId = await _bookRepository.CheckIdIsExistAsync(bookId);
             if (!IsValidBookId)
@@ -220,6 +233,8 @@ namespace LibraryManagementSystem.Managements
                 EndExecute();
                 return;
             }
+
+            Console.WriteLine($"The Price of book is {_bookRepository.GetBookPriceAsync(bookId)} and you should return it before {DateTime.UtcNow.AddDays(Constants.MaxAllowedDaysToBorrowBook).ToShortDateString()} on each extra day we will take {Constants.FinePerDay}");
             Borrowing borrowing = Borrowing.Create(memberId, bookId);
             await _borrowingRepository.AddAsync(borrowing);
             EndMessageOfAddAndUpdateAndDelete("borrow", await _unitOfWork.SaveChangesAsync() > 0,"book");
@@ -239,13 +254,16 @@ namespace LibraryManagementSystem.Managements
             { 
                 Console.WriteLine("The book already returned.");
                 EndExecute();
+                return;
             }
-            else
-            {
-                borrowing.ReturnBook();
-                _borrowingRepository.Update(borrowing);
-                EndMessageOfAddAndUpdateAndDelete("return" ,await _unitOfWork.SaveChangesAsync() > 0 ,"book");
-            }
+            borrowing.ReturnBook();
+            int extraDays = borrowing.ReturnDate!.Value.Subtract(DateTime.UtcNow).Days - Constants.MaxAllowedDaysToBorrowBook;
+            double FineAmount = 0;
+            if (extraDays > 0)
+                FineAmount = extraDays * Constants.FinePerDay;
+            Console.WriteLine($"You Have to pay {FineAmount}$");            
+            _borrowingRepository.Update(borrowing);
+            EndMessageOfAddAndUpdateAndDelete("return" ,await _unitOfWork.SaveChangesAsync() > 0 ,"book");
         }
         private async Task GetMemberBorrowingHistoryAsync()
         {

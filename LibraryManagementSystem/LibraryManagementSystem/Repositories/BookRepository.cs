@@ -7,6 +7,8 @@ namespace LibraryManagementSystem.Repositories
 {
     public class BookRepository(ApplicationDbContext dbContext) : Repository<Book>(dbContext) ,IBookRepository
     {
+        public async Task<double> GetBookPriceAsync(int bookId) =>
+            (await _set.FirstAsync(x => x.Id == bookId)).Price;
         public async Task<List<string>> GetBooksThatHaveNeverBeenBorrowedAsync() =>
             await _set.Where(x => x.Borrowings.Count == 0).Select(x => x.Title).ToListAsync();
         public async Task<List<string>> CurrentlyAvailableBooksAsync(List<int> borrowedBooksId) =>
