@@ -12,6 +12,8 @@ namespace LibraryManagementSystem.Repositories
             await _set.Where(x => x.ReturnDate == null).Select(x => x.BookId).ToListAsync();
         public async Task<List<string>> CurrentlyBorrowedBooksNameAsync() =>
             await _set.Where(x => x.ReturnDate == null).Select(x => x.Book.Title).ToListAsync();
+        public async Task<List<string>> MembersWhoCurrentlyHaveBorrowedBooksAsync() =>
+            await _set.Where(x => x.ReturnDate == null).Select(x => x.Member.Name).Distinct().ToListAsync();
         public async Task<List<BooksNameAndBorrowCountDto>> GetBooksAndCountOfBorrowAsync()
         {
             return await _set.GroupBy(x => x.Book.Title).Select(x => 

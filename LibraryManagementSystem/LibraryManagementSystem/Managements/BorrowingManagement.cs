@@ -75,7 +75,9 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("4) Book Borrowing History");
                 Console.WriteLine("5) Show currently borrowed books");
                 Console.WriteLine("6) Show currently available books");
-                Console.WriteLine("7) Return to Main Menu");
+                Console.WriteLine("7) Show books that have never been borrowed");
+                Console.WriteLine("8) Show members who currently have borrowed books");
+                Console.WriteLine("9) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
@@ -107,6 +109,14 @@ namespace LibraryManagementSystem.Managements
                         break;
 
                     case ConsoleKey.NumPad7:
+                        await ShowBooksThatHaveNeverBeenBorrowedAsync();
+                        break;
+
+                    case ConsoleKey.NumPad8:
+                        await ShowMembersWhoCurrentlyHaveBorrowedBooksAsync();
+                        break;
+
+                    case ConsoleKey.NumPad9:
                         return;
 
                     default:
@@ -115,6 +125,26 @@ namespace LibraryManagementSystem.Managements
                         break;
                 }
             }
+        }
+
+        private async Task ShowMembersWhoCurrentlyHaveBorrowedBooksAsync()
+        {
+            StartExecute("Show members who currently have borrowed books");
+            List<string> MembersWhoCurrentlyHaveBorrowedBooksName = await _borrowingRepository.MembersWhoCurrentlyHaveBorrowedBooksAsync();
+            foreach (var name in MembersWhoCurrentlyHaveBorrowedBooksName)
+                Console.WriteLine(name);
+            EndExecute();
+
+        }
+
+        private async Task ShowBooksThatHaveNeverBeenBorrowedAsync()
+        {
+            StartExecute("Show books that have never been borrowed");
+            List<string> BooksThatHaveNeverBeenBorrowedName = await _bookRepository.GetBooksThatHaveNeverBeenBorrowedAsync();
+            foreach (var name in BooksThatHaveNeverBeenBorrowedName)
+                Console.WriteLine(name);
+            EndExecute();
+
         }
 
         private async Task ShowCurrentlyAvailableBooksAsync()

@@ -2,6 +2,8 @@
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Interfaces.IRepositories;
+using LibraryManagementSystem.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -76,7 +78,8 @@ namespace LibraryManagementSystem.Managements
                 Console.WriteLine("3) Delete Member");
                 Console.WriteLine("4) Get Member By ID");
                 Console.WriteLine("5) Get All Members");
-                Console.WriteLine("6) Return to Main Menu");
+                Console.WriteLine("6) Search members by name or email");
+                Console.WriteLine("7) Return to Main Menu");
                 Console.Write("\nSelect an option: ");
 
                 ConsoleKey choice = Console.ReadKey().Key;
@@ -102,8 +105,11 @@ namespace LibraryManagementSystem.Managements
                     case ConsoleKey.NumPad5:
                         await GetAllMembersAsync();
                         break;
-
                     case ConsoleKey.NumPad6:
+                        await SearchMembersByNameOrEmailAsync();
+                        break;
+
+                    case ConsoleKey.NumPad7:
                         return;
 
                     default:
@@ -113,6 +119,46 @@ namespace LibraryManagementSystem.Managements
                 }
             }
         }
+
+        private async Task SearchMembersByNameOrEmailAsync()
+        {
+            ConsoleKey finishFilter = ConsoleKey.Enter;
+            while (finishFilter == ConsoleKey.Enter) 
+            {
+                StartExecute("Search members by name or email");
+                IQueryable<Member> query =  _memberRepository.GetMembersQuery();
+
+                Console.Write("Enter Member Name search term: ");
+                Console.WriteLine("Press Enter to skip Name filtering.");
+                string? nameTerm = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(nameTerm))
+                    query = query.Where(m => m.Name.Contains(nameTerm));
+
+                Console.Write("Enter Member Email search term: ");
+                Console.WriteLine("Press Enter to skip email filtering.");
+                string? emailTerm = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(emailTerm))
+                    query = query.Where(m => m.Email.Contains(emailTerm));
+
+                List<Member> result = await query.ToListAsync();
+                Console.Clear();
+                Console.WriteLine("=================================");
+                Console.WriteLine($"         Search Result          ");
+                Console.WriteLine("=================================");
+
+                if (result.Count == 0)
+                    Console.WriteLine("\nNo members matched your criteria.");
+                else
+                    foreach (Member member in result)
+                        Console.WriteLine($"[ID: {member.Id}] Name: {member.Name} | Email: {member.Email} | Phone: {member.Phone}");
+
+                Console.Write("\nPress any key to return to the main menu or Enter to make new search....");
+                finishFilter = Console.ReadKey().Key;
+            }
+        }
+
+
+
         private async Task AddMemberAsync()
         {
             StartExecute("Add New Member");
